@@ -1,0 +1,61 @@
+# Direct Dependencies Vulnerability Report
+
+## @babel/runtime
+@babel/runtime  <7.26.10
+Severity: moderate
+Babel has inefficient RexExp complexity in generated code with .replace when transpiling named capturing groups - https://github.com/advisories/GHSA-968p-4wvh-cqc8
+fix available via `npm audit fix --force`
+Will install @babel/runtime@7.27.0, which is outside the stated dependency range
+node_modules/@babel/runtime
+
+braces  <3.0.3
+Severity: high
+Uncontrolled resource consumption in braces - https://github.com/advisories/GHSA-grv7-fg5c-xmjg
+
+## got
+got  <11.8.5
+Severity: moderate
+Got allows a redirect to a UNIX socket - https://github.com/advisories/GHSA-pfrx-2q88-qq97
+fix available via `npm audit fix --force`
+Will install npm-check-updates@17.1.16, which is a breaking change
+node_modules/got
+node_modules/package-json/node_modules/got
+  package-json  <=6.5.0
+  Depends on vulnerable versions of got
+  node_modules/package-json
+
+## semver
+semver  7.0.0 - 7.5.1
+Severity: high
+semver vulnerable to Regular Expression Denial of Service - https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
+fix available via `npm audit fix --force`
+Will install @babel/preset-env@7.26.9, which is outside the stated dependency range
+node_modules/@babel/core/node_modules/semver
+node_modules/@babel/plugin-transform-runtime/node_modules/semver
+node_modules/@babel/preset-env/node_modules/semver
+node_modules/semver
+  @babel/core  7.13.0 - 7.13.1
+
+## npm-check-updates
+        npm-check-updates  2.2.4 - 14.1.1
+        Depends on vulnerable versions of pacote
+        Depends on vulnerable versions of update-notifier
+        node_modules/npm-check-updates
+
+
+request  *
+Severity: moderate
+Server-Side Request Forgery in Request - https://github.com/advisories/GHSA-p8p7-x288-28g6
+Depends on vulnerable versions of tough-cookie
+
+## pacote
+      pacote  11.1.5 - 11.3.5
+      Depends on vulnerable versions of @npmcli/run-script
+      node_modules/pacote
+
+semver  7.0.0 - 7.5.1
+Severity: high
+semver vulnerable to Regular Expression Denial of Service - https://github.com/advisories/GHSA-c2qf-rxjj-qqgw
+fix available via `npm audit fix --force`
+Will install @babel/preset-env@7.26.9, which is outside the stated dependency range
+node_modules/@babel/core/node_modules/semver
