@@ -34,6 +34,7 @@
     "@testing-library/react-hooks": "https://github.com/testing-library/react-hooks-testing-library/releases",
     "@testing-library/user-event": "https://github.com/testing-library/user-event/releases",
     "@zxing/ngx-scanner": "https://github.com/zxing-js/ngx-scanner/releases",
+    "axios": "https://github.com/axios/axios/blob/master/CHANGELOG.md",
     "bluebird": "http://bluebirdjs.com/docs/changelog.html",
     "browserify": "https://github.com/substack/node-browserify/blob/master/changelog.markdown",
     "cypress": "https://on.cypress.io/changelog",
