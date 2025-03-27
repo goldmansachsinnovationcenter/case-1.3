@@ -5,9 +5,17 @@ import {flow, map, partition} from 'lodash/fp';
 import open from 'open';
 import semver from 'semver';
 import detectIndent from 'detect-indent';
-import ncu from 'npm-check-updates';
+import * as ncuModule from 'npm-check-updates';
 import shell from 'shelljs';
-import {colorizeDiff} from 'npm-check-updates/lib/version-util';
+const ncu = ncuModule.default;
+import chalk from 'chalk';
+
+function colorizeDiff(from, to) {
+  if (from === to) return to;
+  if (!from) return chalk.green(to);
+  if (!to) return chalk.red(from);
+  return chalk.red(from) + ' → ' + chalk.green(to);
+}
 
 import catchAsyncError from '../catchAsyncError';
 import {makeFilterFunction} from '../filterUtils';
@@ -84,9 +92,17 @@ export const handler = catchAsyncError(async opts => {
     .filter(({name}) => opts[name])
     .map(({ncuValue}) => ncuValue)
     .join(',');
-  const currentVersions = ncu.getCurrentDependencies(packageJson, {dep: ncuDepGroups});
-  const latestVersions = await ncu.queryVersions(currentVersions, {versionTarget: 'latest'});
-  let upgradedVersions = ncu.upgradeDependencies(currentVersions, latestVersions);
+  const ncuOptions = {
+    packageData: packageJson,
+    dep: ncuDepGroups,
+    target: 'latest'
+  };
+
+  const analysis = await ncu.run(ncuOptions);
+
+  const currentVersions = analysis.currentDependencies || {};
+  const latestVersions = analysis.latestVersions || {};
+  let upgradedVersions = analysis.upgradedDependencies || {};
 
   // Filtering modules that have to be updated
   upgradedVersions = _.pickBy(
