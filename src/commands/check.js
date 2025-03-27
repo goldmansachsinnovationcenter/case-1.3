@@ -5,9 +5,9 @@ import {flow, map, partition} from 'lodash/fp';
 import open from 'open';
 import semver from 'semver';
 import detectIndent from 'detect-indent';
-import ncu from 'npm-check-updates';
+import {run} from 'npm-check-updates';
 import shell from 'shelljs';
-import {colorizeDiff} from 'npm-check-updates/lib/version-util';
+import {colorizeDiff} from 'npm-check-updates/build/lib/version-util';
 
 import catchAsyncError from '../catchAsyncError';
 import {makeFilterFunction} from '../filterUtils';
@@ -84,9 +84,17 @@ export const handler = catchAsyncError(async opts => {
     .filter(({name}) => opts[name])
     .map(({ncuValue}) => ncuValue)
     .join(',');
-  const currentVersions = ncu.getCurrentDependencies(packageJson, {dep: ncuDepGroups});
-  const latestVersions = await ncu.queryVersions(currentVersions, {versionTarget: 'latest'});
-  let upgradedVersions = ncu.upgradeDependencies(currentVersions, latestVersions);
+  // Use the new run API from npm-check-updates v17.1.16
+  const ncuResults = await run({
+    packageData: packageJson,
+    dep: ncuDepGroups,
+    jsonUpgraded: true,
+    silent: true
+  });
+
+  const currentVersions = ncuResults.currentDependencies || {};
+  const latestVersions = ncuResults.latestVersions || {};
+  let upgradedVersions = ncuResults.upgraded || {};
 
   // Filtering modules that have to be updated
   upgradedVersions = _.pickBy(
